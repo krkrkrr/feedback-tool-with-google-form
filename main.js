@@ -1,4 +1,5 @@
-const DOCUMENT_ID = ScriptProperties.getProperty('DOCUMENT_ID')
+const DOCUMENT_ID =
+  PropertiesService.getScriptProperties().getProperty('DOCUMENT_ID')
 
 function test() {
   UrlFetchApp.fetch('https://www.soundhouse.co.jp/products/detail/item/165356/')
