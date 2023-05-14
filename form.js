@@ -1,32 +1,45 @@
 /**
- * Retrieves the latest response from a Google Form and extracts text and tags from it.
+ * Retrieves the latest response from a Google Form and returns an object containing
+ * its item responses with their respective titles as keys.
  * @function
- * @returns {Object} A dictionary containing the extracted text and tags.
- *   - 'text': a string representing the response to the first question in the form
- *   - 'tags': a string representing the response to the second question in the form,
- *             with each tag preceded by a '#' symbol and separated by a space
- *             (or an empty string if the second question is not present in the response)
+ * @returns {Object} An object containing the item responses of the latest response from a Google Form.
+ * The keys are the titles of the items and the values are the responses.
  */
 function getLatestResponse() {
-  // Retrieve the responses for the active form
-  let form_responses = FormApp.getActiveForm().getResponses()
+  const form_responses = FormApp.getActiveForm().getResponses()
 
-  // Get the latest response and its item responses
   const latest_response = form_responses.pop()
   const item_responses = latest_response.getItemResponses()
 
-  // Extract the text and tags from the item responses
-  const text = '  ' + item_responses[0].getResponse()
-  const tags = item_responses[1]
-    ? '\n' +
-      item_responses[1]
-        .getResponse()
-        .map((tag) => '#' + tag)
-        .join(' ')
-    : ''
-
-  return {
-    text: text,
-    tags: tags,
+  const switchItemFunction = {
+    なかみ: (item_response) => {
+      return '  ' + item_response.getResponse()
+    },
+    つながり: (item_response) => {
+      return (
+        '\n' +
+        [...item_response.getResponse()].map((tag) => '#' + tag).join(' ')
+      )
+    },
+    Keep: (item_response) => {
+      return item_response.getResponse()
+    },
+    Problem: (item_response) => {
+      return item_response.getResponse()
+    },
+    Try: (item_response) => {
+      return item_response.getResponse()
+    },
   }
+
+  return Object.fromEntries(
+    item_responses
+      .filter((item_response) => {
+        return item_response
+      })
+      .map((item_response) => {
+        const title = item_response.getItem().getTitle()
+        return [title, switchItemFunction[title](item_response)]
+      })
+  )
 }

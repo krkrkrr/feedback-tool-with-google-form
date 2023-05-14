@@ -1,8 +1,16 @@
 const DOCUMENT_ID =
   PropertiesService.getScriptProperties().getProperty('DOCUMENT_ID')
 
+const KPT_SHEET_ID =
+  PropertiesService.getScriptProperties().getProperty('KPT_SHEET_ID')
+
 function test() {
-  UrlFetchApp.fetch('https://www.soundhouse.co.jp/products/detail/item/165356/')
+  onSubmitForm()
+}
+
+function onSubmitForm() {
+  const form_response = getLatestResponse()
+  setToDiary(form_response)
 }
 
 function replaceLink(paragraph) {
@@ -24,18 +32,18 @@ function replaceLink(paragraph) {
  * Appends the latest form response to a Google Document as a new paragraph.
  * @function
  */
-function setToDiary() {
-  const form_response = getLatestResponse()
+function setToDiary(form_response = getLatestResponse()) {
+  console.log(form_response)
   const par = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
-    .appendParagraph(form_response.text + form_response.tags + '\n')
+    .appendParagraph(form_response.なかみ + form_response.つながり + '\n')
   par.editAsText().setUnderline(false)
-  if (form_response.tags.length > 0) {
+  if (form_response.つながり.length > 0) {
     par
       .editAsText()
       .setUnderline(
-        form_response.text.length,
-        form_response.text.length + form_response.tags.length - 1,
+        form_response.なかみ.length,
+        form_response.なかみ.length + form_response.つながり.length - 1,
         true
       )
   }
