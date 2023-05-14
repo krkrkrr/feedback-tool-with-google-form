@@ -1,9 +1,6 @@
 const DOCUMENT_ID =
   PropertiesService.getScriptProperties().getProperty('DOCUMENT_ID')
 
-const KPT_SHEET_ID =
-  PropertiesService.getScriptProperties().getProperty('KPT_SHEET_ID')
-
 function test() {
   onSubmitForm()
 }
@@ -11,6 +8,7 @@ function test() {
 function onSubmitForm() {
   const form_response = getLatestResponse()
   setToDiary(form_response)
+  setKptSheet(form_response)
 }
 
 function replaceLink(paragraph) {
