@@ -10,10 +10,16 @@ const KPT_SHEET_ID =
   @returns {void}
 */
 function setKptSheet(form_response = getLatestResponse()) {
+  if (!(form_response.Keep || form_response.Problem || form_response.Try)) {
+    return
+  }
+  const ifUndefToEmpty = (value = '') => {
+    return value
+  }
   const row = [
-    form_response.Keep,
-    form_response.Problem,
-    form_response.Try,
+    ifUndefToEmpty(form_response.Keep),
+    ifUndefToEmpty(form_response.Problem),
+    ifUndefToEmpty(form_response.Try),
     new Date(),
   ]
   SpreadsheetApp.openById(KPT_SHEET_ID).getSheets()[0].appendRow(row)

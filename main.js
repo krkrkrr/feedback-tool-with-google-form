@@ -31,12 +31,19 @@ function replaceLink(paragraph) {
  * @function
  */
 function setToDiary(form_response = getLatestResponse()) {
-  console.log(form_response)
+  if (!form_response.なかみ) {
+    return
+  }
+  const ifUndefToEmpty = (value = '') => {
+    return value
+  }
   const par = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
-    .appendParagraph(form_response.なかみ + form_response.つながり + '\n')
+    .appendParagraph(
+      form_response.なかみ + ifUndefToEmpty(form_response.つながり) + '\n'
+    )
   par.editAsText().setUnderline(false)
-  if (form_response.つながり.length > 0) {
+  if (form_response.つながり) {
     par
       .editAsText()
       .setUnderline(
