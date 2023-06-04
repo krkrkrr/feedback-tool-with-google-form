@@ -7,7 +7,7 @@ function test() {
 
 function onSubmitForm() {
   const form_response = getLatestResponse()
-  setToDiary(form_response)
+  writeDiary(form_response)
   setKptSheet(form_response)
 }
 
@@ -30,7 +30,7 @@ function replaceLink(paragraph) {
  * Appends the latest form response to a Google Document as a new paragraph.
  * @function
  */
-function setToDiary(form_response = getLatestResponse()) {
+function writeDiary(form_response = getLatestResponse()) {
   if (
     !(
       form_response.なかみ ||
