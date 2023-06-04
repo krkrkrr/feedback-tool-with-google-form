@@ -31,24 +31,46 @@ function replaceLink(paragraph) {
  * @function
  */
 function setToDiary(form_response = getLatestResponse()) {
-  if (!form_response.なかみ) {
+  if (
+    !(
+      form_response.なかみ ||
+      form_response.Keep ||
+      form_response.Problem ||
+      form_response.Try
+    )
+  ) {
     return
   }
+
   const ifUndefToEmpty = (value = '') => {
     return value
   }
+
+  const paragraph_content = form_response.なかみ
+    ? form_response.なかみ + '\n'
+    : ''
+  const paragraph_kpt = ['Keep', 'Problem', 'Try']
+    .filter((key) => form_response[key])
+    .map((key) => key + ': ' + form_response[key])
+    .join('\n')
   const par = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
     .appendParagraph(
-      form_response.なかみ + ifUndefToEmpty(form_response.つながり) + '\n'
+      paragraph_content +
+        paragraph_kpt +
+        ifUndefToEmpty(form_response.つながり) +
+        '\n'
     )
   par.editAsText().setUnderline(false)
   if (form_response.つながり) {
     par
       .editAsText()
       .setUnderline(
-        form_response.なかみ.length,
-        form_response.なかみ.length + form_response.つながり.length - 1,
+        paragraph_content.length + paragraph_kpt.length,
+        paragraph_content.length +
+          paragraph_kpt.length +
+          form_response.つながり.length -
+          1,
         true
       )
   }
