@@ -6,40 +6,39 @@
  * The keys are the titles of the items and the values are the responses.
  */
 function getLatestResponse() {
-  const form_responses = FormApp.getActiveForm().getResponses()
+  const formResponses = FormApp.getActiveForm().getResponses()
 
-  const latest_response = form_responses.pop()
-  const item_responses = latest_response.getItemResponses()
+  const latestResponse = formResponses.pop()
+  const itemResponses = latestResponse.getItemResponses()
 
   const switchItemFunction = {
-    なかみ: (item_response) => {
-      return '  ' + item_response.getResponse()
+    なかみ: (itemResponse) => {
+      return '  ' + itemResponse.getResponse()
     },
-    つながり: (item_response) => {
+    つながり: (itemResponse) => {
       return (
-        '\n' +
-        [...item_response.getResponse()].map((tag) => '#' + tag).join(' ')
+        '\n' + [...itemResponse.getResponse()].map((tag) => '#' + tag).join(' ')
       )
     },
-    Keep: (item_response) => {
-      return item_response.getResponse()
+    Keep: (itemResponse) => {
+      return itemResponse.getResponse()
     },
-    Problem: (item_response) => {
-      return item_response.getResponse()
+    Problem: (itemResponse) => {
+      return itemResponse.getResponse()
     },
-    Try: (item_response) => {
-      return item_response.getResponse()
+    Try: (itemResponse) => {
+      return itemResponse.getResponse()
     },
   }
 
   return Object.fromEntries(
-    item_responses
-      .filter((item_response) => {
-        return item_response
+    itemResponses
+      .filter((itemResponse) => {
+        return itemResponse
       })
-      .map((item_response) => {
-        const title = item_response.getItem().getTitle()
-        return [title, switchItemFunction[title](item_response)]
+      .map((itemResponse) => {
+        const title = itemResponse.getItem().getTitle()
+        return [title, switchItemFunction[title](itemResponse)]
       })
   )
 }

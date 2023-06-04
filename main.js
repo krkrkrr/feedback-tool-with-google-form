@@ -6,9 +6,9 @@ function test() {
 }
 
 function onSubmitForm() {
-  const form_response = getLatestResponse()
-  writeDiary(form_response)
-  setKptSheet(form_response)
+  const formResponse = getLatestResponse()
+  writeDiary(formResponse)
+  setKptSheet(formResponse)
 }
 
 function replaceLink(paragraph) {
@@ -30,13 +30,13 @@ function replaceLink(paragraph) {
  * Appends the latest form response to a Google Document as a new paragraph.
  * @function
  */
-function writeDiary(form_response = getLatestResponse()) {
+function writeDiary(formResponse = getLatestResponse()) {
   if (
     !(
-      form_response.なかみ ||
-      form_response.Keep ||
-      form_response.Problem ||
-      form_response.Try
+      formResponse.なかみ ||
+      formResponse.Keep ||
+      formResponse.Problem ||
+      formResponse.Try
     )
   ) {
     return
@@ -46,35 +46,33 @@ function writeDiary(form_response = getLatestResponse()) {
     return value
   }
 
-  const paragraph_content = form_response.なかみ
-    ? form_response.なかみ + '\n'
-    : ''
-  const paragraph_kpt = ['Keep', 'Problem', 'Try']
-    .filter((key) => form_response[key])
-    .map((key) => key + ': ' + form_response[key])
+  const paragraphContent = formResponse.なかみ ? formResponse.なかみ + '\n' : ''
+  const paragraphKpt = ['Keep', 'Problem', 'Try']
+    .filter((key) => formResponse[key])
+    .map((key) => key + ': ' + formResponse[key])
     .join('\n')
-  const par = DocumentApp.openById(DOCUMENT_ID)
+  const paragraph = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
     .appendParagraph(
-      paragraph_content +
-        paragraph_kpt +
-        ifUndefToEmpty(form_response.つながり) +
+      paragraphContent +
+        paragraphKpt +
+        ifUndefToEmpty(formResponse.つながり) +
         '\n'
     )
-  par.editAsText().setUnderline(false)
-  if (form_response.つながり) {
-    par
+  paragraph.editAsText().setUnderline(false)
+  if (formResponse.つながり) {
+    paragraph
       .editAsText()
       .setUnderline(
-        paragraph_content.length + paragraph_kpt.length,
-        paragraph_content.length +
-          paragraph_kpt.length +
-          form_response.つながり.length -
+        paragraphContent.length + paragraphKpt.length,
+        paragraphContent.length +
+          paragraphKpt.length +
+          formResponse.つながり.length -
           1,
         true
       )
   }
-  replaceLink(par)
+  replaceLink(paragraph)
 }
 
 function addHeadDate() {
