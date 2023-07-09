@@ -5,12 +5,23 @@ function test() {
   onSubmitForm()
 }
 
+/**
+ * Handles the submission of a form.
+ * @function
+ * @returns {void}
+ */
 function onSubmitForm() {
   const formResponse = getLatestResponse()
   writeDiary(formResponse)
   setKptSheet(formResponse)
 }
 
+/**
+ * Replaces URLs in a paragraph with their corresponding page titles as links.
+ * @function
+ * @param {GoogleAppsScript.Document.Paragraph} paragraph - The paragraph to replace the links in.
+ * @returns {void}
+ */
 function replaceLink(paragraph) {
   const text = paragraph.getText()
   const urlRowRegexp = new RegExp('https?://.+', 'g')
@@ -27,8 +38,15 @@ function replaceLink(paragraph) {
 }
 
 /**
- * Appends the latest form response to a Google Document as a new paragraph.
+ * Writes the form response to a diary document.
  * @function
+ * @param {Object} formResponse - An object containing the form response. It has the following properties:
+ *   - なかみ {string} (optional) - The response to the 'なかみ' question.
+ *   - Keep {string} (optional) - The response to the 'Keep' question.
+ *   - Problem {string} (optional) - The response to the 'Problem' question.
+ *   - Try {string} (optional) - The response to the 'Try' question.
+ *   - つながり {string} (optional) - The response to the 'つながり' question.
+ * @returns {void}
  */
 function writeDiary(formResponse = getLatestResponse()) {
   if (
@@ -75,13 +93,15 @@ function writeDiary(formResponse = getLatestResponse()) {
   replaceLink(paragraph)
 }
 
+/**
+ * Adds a heading with the current date to the document body.
+ * @function
+ * @returns {void}
+ */
 function addHeadDate() {
-  // 「(年).(月).(日)」の文字列を作る。
   const title = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'YYYY.MM.dd')
-  // 文書に文字列を追加。
   const head_date = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
     .appendParagraph(title)
-  // 追加した文字を大きくする。
   head_date.setHeading(DocumentApp.ParagraphHeading.HEADING2)
 }
