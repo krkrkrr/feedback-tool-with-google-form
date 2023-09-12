@@ -66,11 +66,11 @@ function writeDiary(formResponse = getLatestResponse()) {
     return value
   }
 
-  const paragraphContent = formResponse.なかみ ? formResponse.なかみ + '\n' : ''
+  const paragraphContent = ifUndefToEmpty(formResponse.なかみ)
   const paragraphKpt = ['Keep', 'Problem', 'Try']
     .filter((key) => formResponse[key])
-    .map((key) => key + ': ' + formResponse[key])
-    .join('\n')
+    .map((key) => '\n' + key + ': ' + formResponse[key])
+    .join('')
   const paragraph = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
     .appendParagraph(
@@ -84,11 +84,10 @@ function writeDiary(formResponse = getLatestResponse()) {
     paragraph
       .editAsText()
       .setUnderline(
-        paragraphContent.length + paragraphKpt.length,
+        paragraphContent.length + paragraphKpt.length + 1,
         paragraphContent.length +
           paragraphKpt.length +
-          formResponse.つながり.length -
-          1,
+          formResponse.つながり.length,
         true
       )
   }
