@@ -26,13 +26,13 @@ function onSubmitForm() {
  */
 function replaceLink(paragraph) {
   const text = paragraph.getText()
-  const urlRowRegexp = new RegExp('https?://.+', 'g')
+  const urlRowRegexp = /\s(https?:\/\/.+\S)/g
   for (const matchObj of [...text.matchAll(urlRowRegexp)].reverse()) {
-    const url = matchObj[0]
+    const url = matchObj[1]
     const startIndex = matchObj.index
     const title = getPageTitle(url)
     paragraph.editAsText().deleteText(startIndex, startIndex + url.length)
-    paragraph.editAsText().insertText(startIndex, title + '\n')
+    paragraph.editAsText().insertText(startIndex, title)
     paragraph
       .editAsText()
       .setLinkUrl(startIndex, startIndex + title.length, url)

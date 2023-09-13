@@ -26,7 +26,7 @@ function getPageTitle(url) {
 function getHtmlFromResponse(response) {
   const OTHER_CHARSET_LIST = ['Shift_JIS', 'EUC-JP']
   const encodingUtf8 = response.getContentText()
-  const charsetRegexp = new RegExp('charset=(.+)[s"]', 'g')
+  const charsetRegexp = /charset=(.+)[s"]/g
   const charset = getMatchText(encodingUtf8, charsetRegexp)
   if (OTHER_CHARSET_LIST.includes(charset)) {
     return response.getContentText(charset)
