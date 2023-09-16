@@ -4,7 +4,7 @@ const DOCUMENT_ID =
 function test() {
   const testTweetUrl =
     'https://twitter.com/shishirobotan/status/1681567718280138752?s=20'
-  console.log(getTweetContents(testTweetUrl))
+  console.log(getTweetEmbedText(testTweetUrl))
 }
 
 /**
