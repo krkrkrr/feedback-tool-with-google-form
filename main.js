@@ -30,12 +30,24 @@ function replaceLink(paragraph) {
   for (const matchObj of [...text.matchAll(urlRowRegexp)].reverse()) {
     const url = matchObj[1]
     const startIndex = matchObj.index
-    const title = getPageTitle(url)
     paragraph.editAsText().deleteText(startIndex, startIndex + url.length)
-    paragraph.editAsText().insertText(startIndex, title)
-    paragraph
-      .editAsText()
-      .setLinkUrl(startIndex, startIndex + title.length, url)
+    if (isTweet(url)) {
+      const tweetEmbedText = getTweetEmbedText(url)
+      paragraph.editAsText().insertText(startIndex, tweetEmbedText)
+      paragraph
+        .editAsText()
+        .setLinkUrl(
+          startIndex + tweetEmbedText.length - url.length,
+          startIndex + tweetEmbedText.length,
+          url
+        )
+    } else {
+      const title = getPageTitle(url)
+      paragraph.editAsText().insertText(startIndex, title)
+      paragraph
+        .editAsText()
+        .setLinkUrl(startIndex, startIndex + title.length, url)
+    }
   }
 }
 

@@ -5,8 +5,22 @@
  * @returns {boolean} True if the URL is a Twitter tweet URL, otherwise false.
  */
 function isTweet(url) {
-  const tweetUrlPattern = /https:\/\/twitter.com\/.+\/status\/.+/
+  const tweetUrlPattern = /https:\/\/[x|twitter].com\/.+\/status\/.+/
   return tweetUrlPattern.test(url)
+}
+
+/**
+ * Convert to Twitter URL.
+ * @function
+ * @param {string} url - The URL to check.
+ * @returns {string} Twitter URL.
+ */
+function toTwitterUrl(url) {
+  const tweetUrlPattern = /https:\/\/[x|twitter].com\/.+\/status\/.+/
+  return url.replace(
+    /https:\/\/[x|twitter].com\/(.+)\/status\/(.+)/,
+    'https://twitter.com/$1/status/$2'
+  )
 }
 
 /**
@@ -16,7 +30,8 @@ function isTweet(url) {
  * @returns {string} Tweet contents.
  */
 function getTweetEmbedHtml(url) {
-  const getApiUrl = 'https://publish.twitter.com/oembed?url=' + url
+  const getApiUrl =
+    'https://publish.twitter.com/oembed?url=' + toTwitterUrl(url)
   const response = UrlFetchApp.fetch(getApiUrl)
   const json = JSON.parse(response.getContentText())
   return json.html
