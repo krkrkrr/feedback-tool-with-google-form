@@ -2,9 +2,9 @@ const DOCUMENT_ID =
   PropertiesService.getScriptProperties().getProperty('DOCUMENT_ID')
 
 function test() {
-  const testTweetUrl =
-    'https://twitter.com/shishirobotan/status/1681567718280138752?s=20'
-  console.log(getTweetEmbedText(testTweetUrl))
+  const testImgUrl =
+    'https://twitter.com/ktydn/status/1689856770313998337/photo/1'
+  console.log(getImageBlob(testImgUrl))
 }
 
 /**
@@ -29,7 +29,7 @@ function replaceLink(paragraph) {
   const urlRowRegexp = /\s(https?:\/\/.+\S)/g
   for (const matchObj of [...text.matchAll(urlRowRegexp)].reverse()) {
     const url = matchObj[1]
-    const startIndex = matchObj.index
+    const startIndex = matchObj.index + 1
     paragraph.editAsText().deleteText(startIndex, startIndex + url.length)
     if (isTweet(url)) {
       const tweetEmbedText = getTweetEmbedText(url)
@@ -38,7 +38,7 @@ function replaceLink(paragraph) {
         .editAsText()
         .setLinkUrl(
           startIndex + tweetEmbedText.length - url.length,
-          startIndex + tweetEmbedText.length,
+          startIndex + tweetEmbedText.length - 1,
           url
         )
     } else {
@@ -46,7 +46,7 @@ function replaceLink(paragraph) {
       paragraph.editAsText().insertText(startIndex, title)
       paragraph
         .editAsText()
-        .setLinkUrl(startIndex, startIndex + title.length, url)
+        .setLinkUrl(startIndex, startIndex + title.length - 1, url)
     }
   }
 }
@@ -75,14 +75,19 @@ function writeDiary(formResponse = getLatestResponse()) {
   }
 
   const ifUndefToEmpty = (value = '') => {
-    return value
+    if (String(value).length === 0) {
+      return ''
+    }
+    return value + '\n'
   }
 
   const paragraphContent = ifUndefToEmpty(formResponse.なかみ)
-  const paragraphKpt = ['Keep', 'Problem', 'Try']
-    .filter((key) => formResponse[key])
-    .map((key) => '\n' + key + ': ' + formResponse[key])
-    .join('')
+  const paragraphKpt = ifUndefToEmpty(
+    ['Keep', 'Problem', 'Try']
+      .filter((key) => formResponse[key])
+      .map((key) => '\n' + key + ': ' + formResponse[key])
+      .join('')
+  )
   const paragraph = DocumentApp.openById(DOCUMENT_ID)
     .getBody()
     .appendParagraph(

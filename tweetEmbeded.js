@@ -47,7 +47,27 @@ function getTweetEmbedText(url) {
   const tweetEmbedHtml = getTweetEmbedHtml(url)
   const allMatchObj = [...tweetEmbedHtml.matchAll(/<p.*?>(.+)<\/p>(.+?)</g)]
   for (const matchObj of allMatchObj) {
-    return matchObj[1].replace(/<br>/g, '\n') + '\n' + matchObj[2] + '\n' + url
+    return (
+      matchObj[1].replaceAll(/<br>/g, '\n') +
+      '\n' +
+      matchObj[2].replaceAll(/&mdash;/gu, '─') +
+      '\n' +
+      url
+    )
   }
   return url
+}
+
+/**
+ * get image by twitter image url.
+ * @function
+ * @param {string} url - The URL to check.
+ * @returns {Blob} image.
+ */
+function getImageBlob(url) {
+  const response = UrlFetchApp.fetch(url, { muteHttpExceptions: true })
+  console.log(response.getResponseCode())
+  console.log(response.getHeaders())
+  console.log(response.getContentText())
+  return response.getBlob()
 }
