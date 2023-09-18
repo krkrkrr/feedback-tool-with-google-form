@@ -24,13 +24,14 @@ function getPageTitle(url) {
  * @returns {string} - The HTML content of the response as a string.
  */
 function getHtmlFromResponse(response) {
+  const OTHER_CHARSET_LIST = ['Shift_JIS', 'EUC-JP']
   const encodingUtf8 = response.getContentText()
-  const charsetRegexp = new RegExp('charset=(.+)[s"]', 'g')
-  if ('Shift_JIS' == getMatchText(encodingUtf8, charsetRegexp)) {
-    return response.getContentText('Shift_JIS')
-  } else {
-    return encodingUtf8
+  const charsetRegexp = /charset=(.+)[s"]/g
+  const charset = getMatchText(encodingUtf8, charsetRegexp)
+  if (OTHER_CHARSET_LIST.includes(charset)) {
+    return response.getContentText(charset)
   }
+  return encodingUtf8
 }
 
 /**
