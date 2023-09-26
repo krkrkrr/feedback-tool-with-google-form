@@ -1,1 +1,5 @@
+## Credential file for Google clasp
 .clasp.json
+
+## Ignore file for test functions
+_test.js

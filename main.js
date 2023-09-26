@@ -1,12 +1,6 @@
 const DOCUMENT_ID =
   PropertiesService.getScriptProperties().getProperty('DOCUMENT_ID')
 
-function test() {
-  const testImgUrl =
-    'https://x.com/CrazyRaccoonCup/status/1704792102251684039?s=20'
-  console.log(getImageBlob(testImgUrl))
-}
-
 /**
  * Handles the submission of a form.
  * @function
