@@ -3,7 +3,7 @@ const DOCUMENT_ID =
 
 function test() {
   const testImgUrl =
-    'https://twitter.com/ktydn/status/1689856770313998337/photo/1'
+    'https://x.com/CrazyRaccoonCup/status/1704792102251684039?s=20'
   console.log(getImageBlob(testImgUrl))
 }
 
