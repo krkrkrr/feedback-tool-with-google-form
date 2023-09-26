@@ -1,12 +1,6 @@
 const DOCUMENT_ID =
   PropertiesService.getScriptProperties().getProperty('DOCUMENT_ID')
 
-function test() {
-  const testImgUrl =
-    'https://twitter.com/ktydn/status/1689856770313998337/photo/1'
-  console.log(getImageBlob(testImgUrl))
-}
-
 /**
  * Handles the submission of a form.
  * @function
@@ -26,11 +20,11 @@ function onSubmitForm() {
  */
 function replaceLink(paragraph) {
   const text = paragraph.getText()
-  const urlRowRegexp = /\s(https?:\/\/.+\S)/g
+  const urlRowRegexp = /\s(https?:\/\/.+)\s/g
   for (const matchObj of [...text.matchAll(urlRowRegexp)].reverse()) {
     const url = matchObj[1]
     const startIndex = matchObj.index + 1
-    paragraph.editAsText().deleteText(startIndex, startIndex + url.length)
+    paragraph.editAsText().deleteText(startIndex, startIndex + url.length - 1)
     if (isTweet(url)) {
       const tweetEmbedText = getTweetEmbedText(url)
       paragraph.editAsText().insertText(startIndex, tweetEmbedText)
