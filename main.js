@@ -20,10 +20,10 @@ function onSubmitForm() {
  */
 function replaceLink(paragraph) {
   const text = paragraph.getText()
-  const urlRowRegexp = /\s(https?:\/\/.+)\s/g
+  const urlRowRegexp = /(https?:\/\/.+)\s/g
   for (const matchObj of [...text.matchAll(urlRowRegexp)].reverse()) {
     const url = matchObj[1]
-    const startIndex = matchObj.index + 1
+    const startIndex = matchObj.index
     paragraph.editAsText().deleteText(startIndex, startIndex + url.length - 1)
     if (isTweet(url)) {
       const tweetEmbedText = getTweetEmbedText(url)
